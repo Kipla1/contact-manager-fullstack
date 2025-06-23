@@ -1,0 +1,156 @@
+{
+  "contacts": [
+    {
+      "name": "John big",
+      "email": "john.doe@gmail.com",
+      "phone": "+254123456787",
+      "isFavorite": false,
+      "isBlocked": false,
+      "id": "1"
+    },
+    {
+      "id": "2",
+      "name": "Jane Smith",
+      "email": "jane.smith@gmail.com",
+      "phone": "+254765345128",
+      "isFavorite": false,
+      "isBlocked": false
+    },
+    {
+      "id": "3",
+      "name": "Robert Johnson",
+      "email": "robert.johnson@gmail.com",
+      "phone": "+254722635813",
+      "isFavorite": true,
+      "isBlocked": false
+    },
+    {
+      "id": "4",
+      "name": "Emily Davis",
+      "email": "emily.davis@gmail.com",
+      "phone": "+254 112 543 834",
+      "isFavorite": false,
+      "isBlocked": false
+    },
+    {
+      "id": "5",
+      "name": "Michael Wilson",
+      "email": "michael.wilson@gmail.com",
+      "phone": "+254701222671",
+      "isFavorite": false,
+      "isBlocked": false
+    },
+    {
+      "id": "a202",
+      "name": "oscar",
+      "email": "sdfghj@gmail.com",
+      "phone": "2346789876",
+      "isFavorite": false,
+      "isBlocked": false
+    },
+    {
+      "id": "9746",
+      "name": "sdsd",
+      "email": "123456sdfgh@gmail.com",
+      "phone": "2345678",
+      "isFavorite": false,
+      "isBlocked": false
+    },
+    {
+      "id": "36e6",
+      "name": "fgds",
+      "email": "3jfk@gmail.com",
+      "phone": "7896543456",
+      "isFavorite": false,
+      "isBlocked": false
+    },
+    {
+      "id": "f744",
+      "name": "cghds",
+      "email": "jjf@gmail.com",
+      "phone": "3485678767",
+      "isFavorite": false,
+      "isBlocked": false
+    },
+    {
+      "id": "4fbf",
+      "name": "hjfgwjh",
+      "email": "test@example.com",
+      "phone": "123456789",
+      "isFavorite": false,
+      "isBlocked": false
+    },
+    {
+      "id": "5883",
+      "name": "dfghj",
+      "email": "fghj@gm.com",
+      "phone": "3456789976",
+      "isFavorite": false,
+      "isBlocked": false
+    },
+    {
+      "id": "6c98",
+      "name": "ds",
+      "email": "dfg@gm.com",
+      "phone": "2345678907",
+      "isFavorite": true,
+      "isBlocked": false
+    },
+    {
+      "id": "e901",
+      "name": "fd",
+      "email": "jhhdfdffd@nm.com",
+      "phone": "4676967767",
+      "isFavorite": true,
+      "isBlocked": false
+    },
+    {
+      "id": "8383",
+      "name": "hhs",
+      "email": "ghdh@gmail.com",
+      "phone": "76576876",
+      "isFavorite": false,
+      "isBlocked": true
+    },
+    {
+      "id": "f460",
+      "name": "gdgh",
+      "email": "q@g.com",
+      "phone": "5576857578",
+      "isFavorite": false,
+      "isBlocked": false
+    },
+    {
+      "id": "4c4f",
+      "name": "roman",
+      "email": "ojroman4567@gmail.com",
+      "phone": "4567890987",
+      "isFavorite": false,
+      "isBlocked": false
+    },
+    {
+      "id": "c560",
+      "name": "roman",
+      "email": "ojroman4567@gmail.com",
+      "phone": "1234567890",
+      "isFavorite": false,
+      "isBlocked": false
+    },
+    {
+      "id": "4485",
+      "name": "roam",
+      "email": "ojroman4567@gmail.com",
+      "phone": "9876543234",
+      "isFavorite": true,
+      "isBlocked": false
+    },
+    {
+      "id": "d813",
+      "name": "Roman3",
+      "email": "ojroman4567@gmail.com",
+      "phone": "9876543212",
+      "isFavorite": false,
+      "isBlocked": false
+    }
+  ]
+}
