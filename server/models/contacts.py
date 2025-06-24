@@ -16,7 +16,7 @@ class Contact(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-    # Relationships (assuming you have User and ContactGroup models)
+    # Relationships
     user = db.relationship('User', backref=db.backref('contacts', lazy=True))
     
     # SQLAlchemy validators
