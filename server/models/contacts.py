@@ -186,3 +186,31 @@ class Contact(db.Model):
             return False, 'Invalid user ID format'
         
         return True, None
+    
+@classmethod
+def delete_contact(cls, contact_id):
+    """
+    Delete a contact by ID.
+
+    Args:
+        contact_id (int): ID of the contact to delete.
+
+    Returns:
+        tuple: (success, error_message)
+            - If successful: (True, None)
+            - If failed: (False, error message string)
+    """
+    try:
+        contact = cls.query.get(contact_id)
+        if not contact:
+            return False, "Contact not found"
+        
+        db.session.delete(contact)
+        db.session.commit()
+        return True, None
+
+    except Exception as e:
+        db.session.rollback()
+        return False, f"Failed to delete contact: {str(e)}"
+
+    
