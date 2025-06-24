@@ -1,5 +1,9 @@
 # This file must be used with "source <venv>/bin/activate.fish" *from fish*
+<<<<<<< HEAD
 # (https://fishshell.com/); you cannot run it directly.
+=======
+# (https://fishshell.com/). You cannot run it directly.
+>>>>>>> 4fd95dff8ef250ea63809762a9de09bfbd667576
 
 function deactivate  -d "Exit virtual environment and return to normal shell environment"
     # reset old environment variables
@@ -33,7 +37,11 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
+<<<<<<< HEAD
 set -gx VIRTUAL_ENV "/home/brandon/contact-manager-fullstack/server/venv"
+=======
+set -gx VIRTUAL_ENV "/home/fabs/moringa/projects/contact-manager-fullstack/server/venv"
+>>>>>>> 4fd95dff8ef250ea63809762a9de09bfbd667576
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

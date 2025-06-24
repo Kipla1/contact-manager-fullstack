@@ -1,5 +1,9 @@
 # This file must be used with "source bin/activate.csh" *from csh*.
 # You cannot run it directly.
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4fd95dff8ef250ea63809762a9de09bfbd667576
 # Created by Davide Di Blasi <davidedb@gmail.com>.
 # Ported to Python 3.3 venv by Andrew Svetlov <andrew.svetlov@gmail.com>
 
@@ -8,7 +12,11 @@ alias deactivate 'test $?_OLD_VIRTUAL_PATH != 0 && setenv PATH "$_OLD_VIRTUAL_PA
 # Unset irrelevant variables.
 deactivate nondestructive
 
+<<<<<<< HEAD
 setenv VIRTUAL_ENV "/home/brandon/contact-manager-fullstack/server/venv"
+=======
+setenv VIRTUAL_ENV "/home/fabs/moringa/projects/contact-manager-fullstack/server/venv"
+>>>>>>> 4fd95dff8ef250ea63809762a9de09bfbd667576
 
 set _OLD_VIRTUAL_PATH="$PATH"
 setenv PATH "$VIRTUAL_ENV/bin:$PATH"

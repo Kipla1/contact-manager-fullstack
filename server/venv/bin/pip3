@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #!/home/brandon/contact-manager-fullstack/server/venv/bin/python3
+=======
+#!/home/fabs/moringa/projects/contact-manager-fullstack/server/venv/bin/python
+>>>>>>> 4fd95dff8ef250ea63809762a9de09bfbd667576
 # -*- coding: utf-8 -*-
 import re
 import sys

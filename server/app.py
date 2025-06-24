@@ -1,12 +1,21 @@
+<<<<<<< HEAD
 from flask import Flask, request, jsonify
 from flask_migrate import Migrate
 from flask_cors import CORS
 from .config import db, Config
 from .contacts import Contact, add_contact, edit_contact, delete_contact
 from werkzeug.exceptions import NotFound
+=======
+from config import app, db
+from models.contacts import Contact
+from controllers.add_controller import create_contact
+>>>>>>> 4fd95dff8ef250ea63809762a9de09bfbd667576
 
-app = Flask(__name__)
+# Import all models here to ensure they're registered
+# from models.user import User  # when you create it
+# from models.email import Email  # when you create it
 
+<<<<<<< HEAD
 # Connect to frontend
 CORS(app)
 
@@ -18,6 +27,16 @@ app.config.from_object(Config)
 
 # Load database migrations
 migrate = Migrate(app, db)
+=======
+# Routes
+@app.route('/api/contacts', methods=['POST'])
+def add_contact():
+    return create_contact()
+
+@app.route('/api/test', methods=['GET'])
+def test():
+    return {'message': 'SQLAlchemy backend is running!'}
+>>>>>>> 4fd95dff8ef250ea63809762a9de09bfbd667576
 
 # Create database tables
 with app.app_context():
@@ -84,4 +103,6 @@ def get_all_contacts():
         return jsonify({'error': 'Server error'}), 500
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()  # Create tables if they don't exist
     app.run(debug=True)
