@@ -1,21 +1,21 @@
-from flask import Flask
-from flask_migrate import Migrate
-from flask_cors import CORS
-from .config import db, Config
+from config import app, db
+from models.contacts import Contact
+from controllers.add_controller import create_contact
 
-app = Flask(__name__)
+# Import all models here to ensure they're registered
+# from models.user import User  # when you create it
+# from models.email import Email  # when you create it
 
-#Connect to frontend
-CORS(app)
+# Routes
+@app.route('/api/contacts', methods=['POST'])
+def add_contact():
+    return create_contact()
 
-#connect app to db
-db.init_app(app)
-
-#App configuration
-app.config.from_object(Config)
-
-#load database
-migrate = Migrate(app, db)
+@app.route('/api/test', methods=['GET'])
+def test():
+    return {'message': 'SQLAlchemy backend is running!'}
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()  # Create tables if they don't exist
     app.run(debug=True)
