@@ -1,0 +1,43 @@
+# Core Flask Framework
+Flask==2.3.3
+
+# SQLAlchemy Core (since you're using SQLAlchemy directly)
+SQLAlchemy==2.0.21
+
+# Flask-SQLAlchemy Integration
+Flask-SQLAlchemy==3.0.5
+
+# Database Migrations with Alembic
+Flask-Migrate==4.0.5
+alembic==1.12.0
+
+# CORS Support for React Frontend
+Flask-CORS==4.0.0
+
+# WSGI HTTP Server
+Werkzeug==2.3.7
+
+# Environment Variables Support
+python-dotenv==1.0.0
+
+# Enhanced SQLAlchemy Features
+SQLAlchemy-Utils==0.41.1
+
+# Database Connection Pooling
+psycopg2-binary==2.9.7  # PostgreSQL (remove if using SQLite only)
+
+# Data Validation with SQLAlchemy
+marshmallow-sqlalchemy==0.29.0
+
+# SQLAlchemy Serialization
+flask-marshmallow==0.15.0
+
+# Date and Time Utilities
+python-dateutil==2.8.2
+
+# Development and Testing
+pytest==7.4.2
+pytest-flask==1.2.0
+
+# Optional: SQLAlchemy debugging and profiling
+sqlalchemy-debug==0.1.0
