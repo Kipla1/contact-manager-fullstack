@@ -8,6 +8,7 @@ import { TbLockOpen } from "react-icons/tb";
 import { FaStar } from "react-icons/fa";
 import ReactModal from 'react-modal';
 import axios from 'axios';
+const API_URL = import.meta.env.VITE_API_URL; // For Vite
 
 ReactModal.setAppElement('#root');
 
@@ -112,7 +113,7 @@ function ContactsListPage() {
     }, [deleteStatus]);
 
     useEffect(() => {
-        fetch('https://contact-manager-server-lyart.vercel.app/contacts')
+        fetch(`${API_URL}/contacts`)
         .then(res => res.json())
         .then(data => {
             setContacts(data);
@@ -143,7 +144,7 @@ function ContactsListPage() {
     };
 
     const handleDelete = (contactId) => {
-        fetch(`https://contact-manager-server-lyart.vercel.app/contacts/${contactId}`, {
+        fetch(`${API_URL}/contacts/${contactId}`, {
             method: 'DELETE'
         })
         .then(response => {
@@ -164,7 +165,7 @@ function ContactsListPage() {
     };
 
     const handleToggleBlocked = (contactId, currentBlockedStatus) => {
-        fetch(`https://contact-manager-server-lyart.vercel.app/contacts/${contactId}`, {
+        fetch(`${API_URL}/contacts/${contactId}`, {
             method: 'PATCH',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ isBlocked: !currentBlockedStatus })
@@ -183,7 +184,7 @@ function ContactsListPage() {
 
     const handleToggleFavorite = async (contactId, currentFavoriteStatus) => {
         try {
-            const response = await axios.patch(`https://contact-manager-server-lyart.vercel.app/contacts/${contactId}`, {
+            const response = await axios.patch(`${API_URL}/contacts/${contactId}`, {
                 isFavorite: !currentFavoriteStatus,
             });
             
@@ -216,7 +217,7 @@ function ContactsListPage() {
     const handleEditSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(`https://contact-manager-server-lyart.vercel.app/contacts/${editFormData.id}`, editFormData);
+            const response = await axios.put(`${API_URL}/contacts/${editFormData.id}`, editFormData);
             const updatedContact = response.data;
             
             const updatedList = contacts.map(contact => 
