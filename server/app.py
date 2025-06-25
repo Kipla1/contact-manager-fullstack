@@ -37,9 +37,9 @@ def after_request(response):
     return response
 
 
-@app.route('/api/contacts', methods=['POST'])
-def add_contact():
-    return create_contact()
+# @app.route('/api/contacts', methods=['POST'])
+# def add_contact():
+#     return create_contact()
 
 
 @app.route('/api/test', methods=['GET'])
@@ -99,13 +99,111 @@ def login():
 
 # protection for existing routes
 @app.route('/contacts', methods=['GET'])
-@jwt_required
+@jwt_required()
 def get_contacts():
     current_user_id = get_jwt_identity()   
     contacts = Contact.query.filter_by(user_id=current_user_id).all()
-    return jsonify([contact.to_dict()] for contact in contacts)
+    return jsonify([contact.to_dict() for contact in contacts])  # Fixed syntax error here
+
+# Add these additional routes that your frontend expects
+
+@app.route('/contacts/<int:contact_id>', methods=['GET'])
+@jwt_required()
+def get_contact(contact_id):
+    current_user_id = get_jwt_identity()
+    contact = Contact.query.filter_by(id=contact_id, user_id=current_user_id).first()
     
+    if not contact:
+        return jsonify({'message': 'Contact not found'}), 404
+    
+    return jsonify(contact.to_dict())
+
+@app.route('/contacts/<int:contact_id>', methods=['PUT'])
+@jwt_required()
+def update_contact(contact_id):
+    current_user_id = get_jwt_identity()
+    contact = Contact.query.filter_by(id=contact_id, user_id=current_user_id).first()
+    
+    if not contact:
+        return jsonify({'message': 'Contact not found'}), 404
+    
+    data = request.get_json()
+    
+    try:
+        # Update contact fields if provided
+        if 'name' in data:
+            contact.name = data['name']
+        if 'email' in data:
+            contact.email = data['email']
+        if 'phone' in data:
+            contact.phone = data['phone']
+        if 'address' in data:
+            contact.address = data['address']
+        if 'is_favorite' in data or 'isFavorite' in data:
+            contact.is_favorite = data.get('is_favorite', data.get('isFavorite', contact.is_favorite))
+        if 'is_blocked' in data or 'isBlocked' in data:
+            contact.is_blocked = data.get('is_blocked', data.get('isBlocked', contact.is_blocked))
+        
+        db.session.commit()
+        return jsonify(contact.to_dict())
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': f'Update failed: {str(e)}'}), 400
+
+@app.route('/contacts/<int:contact_id>', methods=['PATCH'])
+@jwt_required()
+def patch_contact(contact_id):
+    current_user_id = get_jwt_identity()
+    contact = Contact.query.filter_by(id=contact_id, user_id=current_user_id).first()
+    
+    if not contact:
+        return jsonify({'message': 'Contact not found'}), 404
+    
+    data = request.get_json()
+    
+    try:
+        # Update only provided fields
+        if 'is_favorite' in data or 'isFavorite' in data:
+            contact.is_favorite = data.get('is_favorite', data.get('isFavorite'))
+        if 'is_blocked' in data or 'isBlocked' in data:
+            contact.is_blocked = data.get('is_blocked', data.get('isBlocked'))
+        
+        db.session.commit()
+        return jsonify(contact.to_dict())
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': f'Update failed: {str(e)}'}), 400
+
+@app.route('/contacts/<int:contact_id>', methods=['DELETE'])
+@jwt_required()
+def delete_contact(contact_id):
+    current_user_id = get_jwt_identity()
+    contact = Contact.query.filter_by(id=contact_id, user_id=current_user_id).first()
+    
+    if not contact:
+        return jsonify({'message': 'Contact not found'}), 404
+    
+    try:
+        db.session.delete(contact)
+        db.session.commit()
+        return jsonify({'message': 'Contact deleted successfully'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': f'Delete failed: {str(e)}'}), 400
+
+# Update the create_contact route to require authentication
+@app.route('/add', methods=['POST'])
+@jwt_required()
+def add_contact():
+    current_user_id = get_jwt_identity()
+    data = request.get_json()
+    
+    # Add user_id to the contact data
+    data['user_id'] = current_user_id
+    
+    return create_contact()
+
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()  # Create tables if they don't exist
-    app.run(debug=True)
+    app.run(port=5000, debug=True)

@@ -1,5 +1,4 @@
-// Login.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,15 +6,29 @@ function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const { login } = useAuth();
+    const [isLoading, setIsLoading] = useState(false);
+    const { login, isAuthenticated } = useAuth();
     const navigate = useNavigate();
+
+    // Redirect if already authenticated
+    useEffect(() => {
+        if (isAuthenticated()) {
+            navigate('/contacts');
+        }
+    }, [isAuthenticated, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
+        setError('');
+        
         const success = await login(username, password);
+        
         if (!success) {
             setError('Invalid username or password');
         }
+        
+        setIsLoading(false);
     };
 
     return (
@@ -29,6 +42,7 @@ function Login() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
+                    disabled={isLoading}
                 />
                 <input
                     type="password"
@@ -36,12 +50,21 @@ function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    disabled={isLoading}
                 />
-                <button type="submit">Login</button>
+                <button type="submit" disabled={isLoading}>
+                    {isLoading ? 'Logging in...' : 'Login'}
+                </button>
             </form>
             <p>
                 Don't have an account? 
-                <button onClick={() => navigate('/register')}>Register</button>
+                <button 
+                    type="button"
+                    onClick={() => navigate('/register')}
+                    disabled={isLoading}
+                >
+                    Register
+                </button>
             </p>
         </div>
     );

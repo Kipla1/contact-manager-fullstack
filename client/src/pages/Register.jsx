@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,17 +7,30 @@ function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { register } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const { register, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate('/contacts');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError('');
+    
     const success = await register(username, email, password);
-    if (success) {
-      navigate('/login');
-    } else {
-      setError('Registration failed');
+    
+    if (!success) {
+      setError('Registration failed. Please try again.');
     }
+    // If successful, the register function will automatically log them in and redirect
+    
+    setIsLoading(false);
   };
 
   return (
@@ -31,6 +44,7 @@ function Register() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
+          disabled={isLoading}
         />
         <input
           type="email"
@@ -38,6 +52,7 @@ function Register() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          disabled={isLoading}
         />
         <input
           type="password"
@@ -45,12 +60,21 @@ function Register() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          disabled={isLoading}
         />
-        <button type="submit">Register</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Creating Account...' : 'Register'}
+        </button>
       </form>
       <p>
         Already have an account? 
-        <button onClick={() => navigate('/login')}>Login</button>
+        <button 
+          type="button"
+          onClick={() => navigate('/login')}
+          disabled={isLoading}
+        >
+          Login
+        </button>
       </p>
     </div>
   );
