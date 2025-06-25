@@ -37,12 +37,19 @@ export function AuthProvider({children}){
             {
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                withCredentials: true
             }
         );
-        return true;
+        
+        if (response.status === 201) {
+            return true;
+        } else {
+            console.error('Registration failed:', response.data.message);
+            return false;
+        }
     } catch (error) {
-        console.error('Registration failed:', error);
+        console.error('Registration error:', error.response?.data?.message || error.message);
         return false;
     }
 }
