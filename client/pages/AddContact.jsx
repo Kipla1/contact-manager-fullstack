@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 
 function AddContact({ closeModal, onAddContact }) {
   const [name, setName] = useState('');
@@ -12,9 +12,7 @@ function AddContact({ closeModal, onAddContact }) {
   useEffect(() => {
     let timeoutId;
     if (addStatus) {
-      timeoutId = setTimeout(() => {
-        setAddStatus(null);
-      }, 3000);
+      timeoutId = setTimeout(() => setAddStatus(null), 3000);
     }
     return () => clearTimeout(timeoutId);
   }, [addStatus]);
@@ -22,23 +20,31 @@ function AddContact({ closeModal, onAddContact }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsAdding(true);
-    
+
+    const token = localStorage.getItem('token'); // ✅ Get JWT token
     const newContact = {
       name,
       email,
       phone,
-      isFavorite,
-      isBlocked
+      is_favorite: isFavorite,
+      is_blocked: isBlocked,
     };
 
     fetch('https://contact-manager-server-lyart.vercel.app/contacts', {
       method: 'POST',
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}` // ✅ Add Authorization header
+      },
       body: JSON.stringify(newContact)
     })
-    .then(resp => resp.json())
+    .then(async resp => {
+      const text = await resp.text();
+      if (!resp.ok) throw new Error(text);
+      return JSON.parse(text);
+    })
     .then(data => {
-      console.log(data, "Added successfully");
+      console.log("✅ Contact added:", data);
       setName('');
       setEmail('');
       setPhone('');
@@ -50,72 +56,73 @@ function AddContact({ closeModal, onAddContact }) {
       closeModal();
     })
     .catch(err => {
-      console.log(err);
+      console.error("❌ Add contact error:", err.message);
       setIsAdding(false);
       setAddStatus('error');
     });
-  }
+  };
 
   return (
     <div className="modal-content">
       <button className="close-modal" onClick={closeModal}>Close</button>
-      <form className='add-contact' onSubmit={handleSubmit}>
+      <form className="add-contact" onSubmit={handleSubmit}>
         <h1>Add New Contact</h1>
-        <input 
-          className='new-contact' 
-          type="text" 
-          placeholder='Enter Name' 
-          value={name} 
-          onChange={(e) => setName(e.target.value)} 
+
+        <input
+          className="new-contact"
+          type="text"
+          placeholder="Enter Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           required
         />
-        <input  
-          className='new-contact' 
-          type="email" 
-          placeholder='Enter email' 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
+        <input
+          className="new-contact"
+          type="email"
+          placeholder="Enter Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
-        <input  
-          className='new-contact' 
-          type="tel" 
-          placeholder='Enter Phone number ' 
-          maxLength={10} 
-          value={phone} 
-          onChange={(e) => setPhone(e.target.value)} 
+        <input
+          className="new-contact"
+          type="tel"
+          placeholder="Enter Phone Number"
+          maxLength={10}
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
           required
         />
-        
-        <button 
-          type="button" 
+
+        <button
+          type="button"
           onClick={() => setIsFavorite(!isFavorite)}
           className={isFavorite ? 'favorite-active' : 'favorite-notActive'}
         >
-          {isFavorite ? 'Remove as favorite ★' : 'Set as Favorite ☆'}
+          {isFavorite ? 'Remove as Favorite ★' : 'Set as Favorite ☆'}
         </button>
-        
-        <button 
-          type="submit" 
-          className='submit-contact' 
+
+        <button
+          type="submit"
+          className="submit-contact"
           disabled={isAdding}
         >
           {isAdding ? 'Adding...' : 'Add Contact'}
         </button>
       </form>
-      
+
       {addStatus && (
         <div className="notification-container">
           <div className={addStatus === 'success' ? 'contact-added' : 'contact-notAdded'}>
             <span>
-              {addStatus === 'success' 
-                ? 'Contact added successfully' 
+              {addStatus === 'success'
+                ? 'Contact added successfully'
                 : 'Failed to add contact. Try again later.'}
             </span>
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }
 
-export default AddContact
+export default AddContact;

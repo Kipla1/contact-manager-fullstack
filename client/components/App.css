@@ -10,12 +10,12 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  width: 100%; /* Full width */
+  width: 100%;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   top: 0;
   left: 0;
   z-index: 1000;
-  box-sizing: border-box; /* This ensures padding is included in width calculation */
+  box-sizing: border-box;
 }
 
 .left-section {
@@ -39,7 +39,7 @@
   color: white;
   font-family: cursive;
   letter-spacing: 1px;
-  text-decoration: none;  /* Add this line */
+  text-decoration: none;
 }
 
 .webname:hover{
@@ -57,7 +57,6 @@
   border: hidden;
   font-size: xxx-large;
   cursor: pointer;
-
 }
 
 .no-underline {
@@ -77,21 +76,17 @@
   transform: scale(1.1);
 }
 
-/* Add padding to body to account for fixed navbar */
 body {
   padding-top: 60px;
   margin: 0;
   box-sizing: border-box;
-  /* Apply Oi as a fallback font for the body */
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Example of using Oi font for certain elements */
 h1, h2:not(.webname), h3 {
   font-family: 'Oi', cursive;
 }
 
-/* Reset box-sizing for all elements */
 *, *:before, *:after {
   box-sizing: border-box;
 }
@@ -100,7 +95,7 @@ h1, h2:not(.webname), h3 {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 60px); /* Account for navbar height */
+  min-height: calc(100vh - 60px);
   padding: 20px;
   background-color: #F7CFD8;
 }
@@ -148,11 +143,12 @@ h1, h2:not(.webname), h3 {
 .feature:hover {
   transform: translateY(-5px);
 }
+
 .favorite-display{
   width: 50px;
   height: 50px;
-  
 }
+
 .feature-icon {
   font-size: 2rem;
   margin-bottom: 15px;
@@ -183,140 +179,133 @@ h1, h2:not(.webname), h3 {
   box-shadow: 0 6px 12px rgba(255, 130, 130, 0.4);
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .intro-features {
     flex-direction: column;
   }
-  
+
   .feature {
     margin: 10px 0;
   }
-  
+
   .intro-title {
     font-size: 2rem;
   }
 }
 
-/* Loading and Error States */
 .loading,
 .error {
-    text-align: center;
-    padding: 20px;
-    font-size: 1.2rem;
-    color: #457b9d;
+  text-align: center;
+  padding: 20px;
+  font-size: 1.2rem;
+  color: #457b9d;
 }
 
-/* Contact List Container */
 .contact-list-container {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .contact-list-title {
-    color: #457b9d;
-    font-family: 'Oi', cursive;
-    margin-bottom: 20px;
+  color: #457b9d;
+  font-family: 'Oi', cursive;
+  margin-bottom: 20px;
 }
 
-/* Add Contact Button */
 .add-contact-btn {
-    background-color: #457b9d;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 5px;
-    text-decoration: none;
-    display: inline-block;
-    margin-bottom: 20px;
-    transition: all 0.3s ease;
-    font-weight: bold;
+  background-color: #457b9d;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  font-weight: bold;
 }
 
 .add-contact-btn:hover {
-    background-color: #ff6b6b;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #ff6b6b;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Contact List */
 .contact-list {
-    display: grid;
-    gap: 15px;
+  display: grid;
+  gap: 15px;
 }
 
-/* Contact Card */
 .contact-card {
-    background-color: white;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: transform 0.3s ease;
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.3s ease;
 }
 
 .contact-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .contact-info h3 {
-    margin: 0 0 5px 0;
-    color: #457b9d;
-    font-family: 'Oi', cursive;
-    font-size: 1.2rem;
+  margin: 0 0 5px 0;
+  color: #457b9d;
+  font-family: 'Oi', cursive;
+  font-size: 1.2rem;
 }
 
 .contact-info p {
-    margin: 5px 0;
-    color: #555;
+  margin: 5px 0;
+  color: #555;
 }
 
 .favorite-icon {
-    margin-left: 10px;
-    color: #FFD700;
+  margin-left: 10px;
+  color: #FFD700;
 }
 
-/* Contact Actions */
 .contact-actions {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 .edit-btn, .delete-btn, .block-btn{
-    padding: 8px 12px;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    font-size: 1.5rem;
+  padding: 8px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
 }
 
-.blocked{
+.blocked {
   color: red;
 }
-.notBlocked{
- color: #4caf50;
+.notBlocked {
+  color: #4caf50;
 }
 
 .notBlocked:hover,
 .delete-btn,
 .edit-btn:hover {
-    transform: translateY(-2px);
+  transform: translateY(-2px);
 }
 
-.isloading{
-  margin-top: 20% ;
+.isloading {
+  margin-top: 20%;
   color: #457b9d;
   text-align: center;
   animation: pulse 1.0s infinite;
-
 }
-@keyframes pulse{
+
+@keyframes pulse {
   0%{opacity: 0.5;}
   50%{opacity: 1;}
   100%{opacity: 0.5;}
@@ -335,7 +324,7 @@ h1, h2:not(.webname), h3 {
   color: #457b9d;
   margin-bottom: 20px;
   text-align: center;
-  border-bottom: 4px black solid ;
+  border-bottom: 4px black solid;
 }
 
 .new-contact {
@@ -359,7 +348,6 @@ h1, h2:not(.webname), h3 {
   transition: background-color 0.3s;
 }
 
-
 .submit-contact {
   background-color: #4CAF50;
   margin-top: 10px;
@@ -374,7 +362,7 @@ h1, h2:not(.webname), h3 {
   color: #333 ;
 }
 
-.favorite-notActive{
+.favorite-notActive {
   background-color: #555;
   color: #FF8282;
 }
@@ -389,7 +377,8 @@ h1, h2:not(.webname), h3 {
   z-index: 1000;
 }
 
-.contact-added {
+.contact-added,
+.contact-deleted {
   width: auto;
   min-width: 300px;
   padding: 15px 20px;
@@ -401,7 +390,8 @@ h1, h2:not(.webname), h3 {
   animation: slideUp 0.3s ease;
 }
 
-.contact-notAdded {
+.contact-notAdded,
+.contact-notDeleted {
   width: auto;
   min-width: 300px;
   padding: 15px 20px;
@@ -424,7 +414,7 @@ h1, h2:not(.webname), h3 {
   }
 }
 
-.backHome{
+.backHome {
   background-color: darkseagreen;
   border: hidden;
   border-radius: 10px;
@@ -433,37 +423,13 @@ h1, h2:not(.webname), h3 {
   margin-left: 40px;
 }
 
-.backHome:hover{
+.backHome:hover {
   cursor: pointer;
   transform: translateY(-7px);
   transition-duration: 1.1s;
 }
 
-.contact-deleted {
-  width: auto;
-  min-width: 300px;
-  padding: 15px 20px;
-  background-color: #4CAF50;
-  color: white;
-  text-align: center;
-  border-radius: 5px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-  animation: slideUp 0.3s ease;
-}
-
-.contact-notDeleted {
-  width: auto;
-  min-width: 300px;
-  padding: 15px 20px;
-  background-color: #f44336;
-  color: white;
-  text-align: center;
-  border-radius: 5px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-  animation: slideUp 0.3s ease;
-}
-
-#searchbar{
+#searchbar {
   width: 200px;
   font-size: large;
   margin-bottom: 15px;
@@ -473,7 +439,7 @@ h1, h2:not(.webname), h3 {
   align-self: right;
 }
 
-.form-select{
+.form-select {
   width: fit-content;
   text-align: center;
   margin-left: 15px;
@@ -482,7 +448,7 @@ h1, h2:not(.webname), h3 {
   height: 30px;
 }
 
-.clear-filter-btn{
+.clear-filter-btn {
   margin-left: 15px;
   font-size: large;
   border-radius: 5px;
@@ -490,13 +456,14 @@ h1, h2:not(.webname), h3 {
   height: 30px;
 }
 
-.clear-filter-btn:hover{
+.clear-filter-btn:hover {
   transform: translateY(-5px);
   transition-duration: .7s;
   background-color: #f44336;
   color: white;
 }
-.filter-status{
+
+.filter-status {
   font-size: large;
 }
 
@@ -682,4 +649,70 @@ h1, h2:not(.webname), h3 {
 
 .form-group.checkbox label::after {
   content: "";
+}
+
+.login-container,
+.register-container {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #F7CFD8;
+  padding: 20px;
+}
+
+.login-container form,
+.register-container form {
+  background-color: #ffffff;
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-sizing: border-box;
+  border-top: 6px solid #457b9d;
+}
+
+.login-container h2,
+.register-container h2 {
+  font-family: 'Oi', cursive;
+  text-align: center;
+  color: #457b9d;
+  margin-bottom: 10px;
+}
+
+.login-container input,
+.register-container input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.login-container button,
+.register-container button {
+  padding: 12px;
+  background-color: #457b9d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.login-container button:hover,
+.register-container button:hover {
+  background-color: #ff6b6b;
+  transform: translateY(-2px);
+}
+
+.login-container p,
+.register-container p {
+  text-align: center;
+  font-size: 0.95rem;
 }

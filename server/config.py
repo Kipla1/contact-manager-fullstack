@@ -1,16 +1,11 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_cors import CORS
 import os
+from flask_sqlalchemy import SQLAlchemy
 
-
-# Configuration
-class Config:
- SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///contacts.db'
- SQLALCHEMY_TRACK_MODIFICATIONS = False
- SECRET_KEY = os.environ.get('SECRET_KEY') or 'your-secret-key-here'
-
-# Initialize extensions
 db = SQLAlchemy()
+basedir = os.path.abspath(os.path.dirname(__file__))
 
+class Config:
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'instance', 'contacts.db')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = 'your-secret-key'
+    JWT_SECRET_KEY = 'your-jwt-secret-key'

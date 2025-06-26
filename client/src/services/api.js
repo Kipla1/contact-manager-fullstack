@@ -1,11 +1,25 @@
-import axios from 'axios';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-const API_URL = import.meta.env.VITE_API_URL; // or process.env.REACT_APP_API_URL
+export async function authFetch(endpoint, options = {}) {
+  const token = localStorage.getItem('access_token');
 
-axios.get(`${API_URL}/api/contacts`)
-  .then(() => {
-    // handle data
-  })
-  .catch(() => {
-    // handle error
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(options.headers || {}),
+  };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const res = await fetch(`${API_URL}${endpoint}`, {
+    ...options,
+    headers,
   });
+
+  if (res.status === 401) {
+    localStorage.removeItem('access_token');
+  }
+
+  return res;
+}
