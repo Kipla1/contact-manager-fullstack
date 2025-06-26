@@ -10,15 +10,15 @@ from controllers.contacts_controller import contacts_bp
 app = Flask(__name__)
 app.config.from_object(Config)
 
-# ✅ Enable CORS only for frontend port
+
 CORS(app, origins="http://localhost:5173", supports_credentials=True)
 
-# ✅ Initialize extensions
+
 db.init_app(app)
 migrate = Migrate(app, db)
 jwt = JWTManager(app)
 
-# ✅ Register blueprints without '/auth' prefix (as requested)
+
 app.register_blueprint(auth_bp)
 app.register_blueprint(contacts_bp, url_prefix='/contacts')
 
