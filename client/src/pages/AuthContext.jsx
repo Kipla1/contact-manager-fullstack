@@ -18,8 +18,13 @@ export function AuthProvider({children}){
             });
             
             const accessToken = response.data.access_token;
+            const userData = response.data.user || { username };
+            
             localStorage.setItem('token', accessToken);
+            localStorage.setItem('user', JSON.stringify(userData));
+            
             setToken(accessToken);
+            setUser(userData);
             
             // Set default authorization header
             axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
@@ -51,6 +56,9 @@ export function AuthProvider({children}){
             );
             
             if (response.status === 201) {
+                // Store user data from registration response
+                const userData = response.data.user || { username, email };
+                
                 // After successful registration, automatically log them in
                 const loginSuccess = await login(username, password);
                 return loginSuccess;
@@ -66,6 +74,7 @@ export function AuthProvider({children}){
 
     const logout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
         setToken(null);
         setUser(null);
         delete axios.defaults.headers.common['Authorization'];
@@ -76,12 +85,37 @@ export function AuthProvider({children}){
         return !!token;
     }
 
+    // Function to fetch user profile (if your backend supports it)
+    const fetchUserProfile = async () => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/profile`);
+            const userData = response.data;
+            setUser(userData);
+            localStorage.setItem('user', JSON.stringify(userData));
+        } catch (error) {
+            console.error('Failed to fetch user profile:', error);
+            // If profile fetch fails, we can still work with stored user data
+        }
+    }
+
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
+        const storedUser = localStorage.getItem('user');
+        
         if (storedToken) {
             setToken(storedToken);
             axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
-            // You could fetch user details here if needed
+            
+            if (storedUser) {
+                try {
+                    setUser(JSON.parse(storedUser));
+                } catch (error) {
+                    console.error('Error parsing stored user data:', error);
+                }
+            }
+            
+            // Optionally fetch fresh user data from server
+            // fetchUserProfile();
         }
         setIsLoading(false);
     }, []);
@@ -102,7 +136,8 @@ export function AuthProvider({children}){
             login, 
             register, 
             logout, 
-            isAuthenticated
+            isAuthenticated,
+            fetchUserProfile
         }}>
             {children}
         </AuthContext.Provider>
