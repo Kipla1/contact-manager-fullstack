@@ -2,6 +2,7 @@ from config import db
 from datetime import datetime
 from sqlalchemy.orm import validates
 
+
 class Contact(db.Model):
     __tablename__ = 'contacts'
     
@@ -10,14 +11,14 @@ class Contact(db.Model):
     email = db.Column(db.String(120), nullable=True)
     phone = db.Column(db.String(20), nullable=True)
     address = db.Column(db.Text, nullable=True)
-    notes = db.Column(db.Text, nullable=True)
+    # notes = db.Column(db.Text, nullable=True)
     is_favorite = db.Column(db.Boolean, default=False)
     is_blocked = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    # created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    # updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-    # Relationships
-    user = db.relationship('User', backref=db.backref('contacts', lazy=True))
+    # Add foreign key to User
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     
     # SQLAlchemy validators
     @validates('email')
@@ -51,11 +52,11 @@ class Contact(db.Model):
             'email': self.email,
             'phone': self.phone,
             'address': self.address,
-            'notes': self.notes,
+            # 'notes': self.notes,
             'is_favorite': self.is_favorite,
             'is_blocked': self.is_blocked,
-            'created_at': self.created_at.isoformat() if self.created_at else None,
-            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+            # 'created_at': self.created_at.isoformat() if self.created_at else None,
+            # 'updated_at': self.updated_at.isoformat() if self.updated_at else None,
             'user_id': self.user_id
         }
     
@@ -186,3 +187,31 @@ class Contact(db.Model):
             return False, 'Invalid user ID format'
         
         return True, None
+    
+@classmethod
+def delete_contact(cls, contact_id):
+    """
+    Delete a contact by ID.
+
+    Args:
+        contact_id (int): ID of the contact to delete.
+
+    Returns:
+        tuple: (success, error_message)
+            - If successful: (True, None)
+            - If failed: (False, error message string)
+    """
+    try:
+        contact = cls.query.get(contact_id)
+        if not contact:
+            return False, "Contact not found"
+        
+        db.session.delete(contact)
+        db.session.commit()
+        return True, None
+
+    except Exception as e:
+        db.session.rollback()
+        return False, f"Failed to delete contact: {str(e)}"
+
+    
