@@ -14,6 +14,7 @@ import React from "react";
 import { AuthProvider, useAuth } from '../pages/AuthContext';
 import Register from "../pages/Register";
 import ProtectedRoute from "../pages/ProtectedRoute";
+import EditContact from "../pages/EditContact";
 
 // Component to handle default route logic
 function DefaultRoute() {
@@ -48,6 +49,11 @@ function App() {
           <Route path="/add" element={
             <ProtectedRoute>
               <AddContact />
+            </ProtectedRoute>
+          } />
+          <Route path="/contacts/:id/edit" element={
+            <ProtectedRoute>
+              <EditContact />
             </ProtectedRoute>
           } />
         </Routes>

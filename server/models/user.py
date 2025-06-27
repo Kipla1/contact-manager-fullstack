@@ -1,4 +1,4 @@
-from config import db
+from server.config import db
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -6,6 +6,7 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
+    
     
     # Relationship with Contact (unchanged)
     contacts = db.relationship('Contact', backref='user', lazy=True)

@@ -3,14 +3,14 @@ from flask_migrate import Migrate
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
-from config import db, Config
+from server.config import db, Config
 from server.models.user import User
 from server.models.contacts import Contact
 from server.controllers.contacts_controller import create_contact
 
 app = Flask(__name__)
 jwt = JWTManager(app)
-CORS(app, origins="*", methods=["GET", "POST", "PUT", "DELETE"])
+CORS(app, origins=["http://localhost:5173"])
 app.config.from_object(Config)
 #connect app to db
 db.init_app(app)    
@@ -18,23 +18,19 @@ db.init_app(app)
 migrate = Migrate(app, db)  
 
 
-# Import all models here to ensure they're registered
-# from models.user import User  # when you create it
-# from models.email import Email  # when you create it
-
 # Routes
 
 @app.route('/')
 def index():
     return "<h1 style='color: red; margin-left: 60px;'>Backend server running</h1>"
 
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
-    return response
+# @app.after_request
+# def after_request(response):
+#     response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
+#     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+#     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+#     response.headers.add('Access-Control-Allow-Credentials', 'true')
+#     return response
 
 
 # @app.route('/api/contacts', methods=['POST'])
@@ -50,7 +46,11 @@ def test():
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
-    
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+    if not username or not email or not password:
+        return jsonify({'message': 'Missing fields'}), 400
     # Basic validation
     if not data or not all(key in data for key in ['username', 'email', 'password']):
         return jsonify({'message': 'Missing required fields'}), 400
@@ -101,8 +101,8 @@ def login():
 @app.route('/contacts', methods=['GET'])
 @jwt_required()
 def get_contacts():
-    current_user_id = get_jwt_identity()   
-    contacts = Contact.query.filter_by(user_id=current_user_id).all()
+    user_id = get_jwt_identity()
+    contacts = Contact.query.filter_by(user_id=user_id).all()
     return jsonify([contact.to_dict() for contact in contacts])  # Fixed syntax error here
 
 # Add these additional routes that your frontend expects
@@ -156,25 +156,18 @@ def update_contact(contact_id):
 def patch_contact(contact_id):
     current_user_id = get_jwt_identity()
     contact = Contact.query.filter_by(id=contact_id, user_id=current_user_id).first()
-    
     if not contact:
         return jsonify({'message': 'Contact not found'}), 404
-    
+
     data = request.get_json()
-    
-    try:
-        # Update only provided fields
-        if 'is_favorite' in data or 'isFavorite' in data:
-            contact.is_favorite = data.get('is_favorite', data.get('isFavorite'))
-        if 'is_blocked' in data or 'isBlocked' in data:
-            contact.is_blocked = data.get('is_blocked', data.get('isBlocked'))
-        
-        db.session.commit()
-        return jsonify(contact.to_dict())
-        
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'message': f'Update failed: {str(e)}'}), 400
+    if 'is_favorite' in data:
+        contact.is_favorite = bool(data['is_favorite'])
+    if 'is_blocked' in data:
+        contact.is_blocked = bool(data['is_blocked'])
+    # Add other fields as needed
+
+    db.session.commit()
+    return jsonify(contact.to_dict()), 200
 
 @app.route('/contacts/<int:contact_id>', methods=['DELETE'])
 @jwt_required()

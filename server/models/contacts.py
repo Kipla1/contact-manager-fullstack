@@ -1,4 +1,4 @@
-from config import db
+from server.config import db
 from datetime import datetime
 from sqlalchemy.orm import validates
 
@@ -10,12 +10,8 @@ class Contact(db.Model):
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), nullable=True)
     phone = db.Column(db.String(20), nullable=True)
-    address = db.Column(db.Text, nullable=True)
-    # notes = db.Column(db.Text, nullable=True)
-    is_favorite = db.Column(db.Boolean, default=False)
-    is_blocked = db.Column(db.Boolean, default=False)
-    # created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    # updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    is_favorite = db.Column(db.Boolean, default=False, nullable=False)
+    is_blocked = db.Column(db.Boolean, default=False, nullable=False)
     
     # Add foreign key to User
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
@@ -51,13 +47,9 @@ class Contact(db.Model):
             'name': self.name,
             'email': self.email,
             'phone': self.phone,
-            'address': self.address,
-            # 'notes': self.notes,
-            'is_favorite': self.is_favorite,
-            'is_blocked': self.is_blocked,
-            # 'created_at': self.created_at.isoformat() if self.created_at else None,
-            # 'updated_at': self.updated_at.isoformat() if self.updated_at else None,
-            'user_id': self.user_id
+            'isFavorite': bool(self.is_favorite),
+            'isBlocked': bool(self.isBlocked),
+            # Add other fields as needed
         }
     
     @classmethod
@@ -214,4 +206,4 @@ def delete_contact(cls, contact_id):
         db.session.rollback()
         return False, f"Failed to delete contact: {str(e)}"
 
-    
+

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 
-function AddContact({ closeModal, onAddContact }) {
+function AddContact() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -8,21 +9,22 @@ function AddContact({ closeModal, onAddContact }) {
   const [isBlocked, setIsBlocked] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [addStatus, setAddStatus] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let timeoutId;
-    if (addStatus) {
+    if (addStatus === 'success') {
       timeoutId = setTimeout(() => {
-        setAddStatus(null);
-      }, 3000);
+        navigate('/'); // Redirect to home or contacts list after success
+      }, 1500);
     }
     return () => clearTimeout(timeoutId);
-  }, [addStatus]);
+  }, [addStatus, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsAdding(true);
-    
+
     const newContact = {
       name,
       email,
@@ -31,9 +33,14 @@ function AddContact({ closeModal, onAddContact }) {
       isBlocked
     };
 
-    fetch('https://contact-manager-server-lyart.vercel.app/contacts', {
+    const token = localStorage.getItem('token');
+
+    fetch(`${import.meta.env.VITE_API_URL}/add`, {
       method: 'POST',
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
       body: JSON.stringify(newContact)
     })
     .then(resp => resp.json())
@@ -46,8 +53,6 @@ function AddContact({ closeModal, onAddContact }) {
       setIsBlocked(false);
       setIsAdding(false);
       setAddStatus('success');
-      onAddContact(data);
-      closeModal();
     })
     .catch(err => {
       console.log(err);
@@ -57,8 +62,7 @@ function AddContact({ closeModal, onAddContact }) {
   }
 
   return (
-    <div className="modal-content">
-      <button className="close-modal" onClick={closeModal}>Close</button>
+    <div className="add-contact-page">
       <form className='add-contact' onSubmit={handleSubmit}>
         <h1>Add New Contact</h1>
         <input 
