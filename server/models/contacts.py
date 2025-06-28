@@ -10,8 +10,8 @@ class Contact(db.Model):
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), nullable=True)
     phone = db.Column(db.String(20), nullable=True)
-    is_favorite = db.Column(db.Boolean, default=False, nullable=False)
-    is_blocked = db.Column(db.Boolean, default=False, nullable=False)
+    is_favorite = db.Column(db.Integer, default=1, nullable=False)
+    is_blocked = db.Column(db.Integer, default=1, nullable=False)
     
     # Add foreign key to User
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
@@ -47,8 +47,10 @@ class Contact(db.Model):
             'name': self.name,
             'email': self.email,
             'phone': self.phone,
-            'isFavorite': bool(self.is_favorite),
-            'isBlocked': bool(self.isBlocked),
+            'isFavorite': self.is_favorite == 2,
+            'isBlocked': self.is_blocked == 2,
+            'is_favorite': self.is_favorite,  # raw value if needed
+            'is_blocked': self.is_blocked,    # raw value if needed
             # Add other fields as needed
         }
     
@@ -180,30 +182,30 @@ class Contact(db.Model):
         
         return True, None
     
-@classmethod
-def delete_contact(cls, contact_id):
-    """
-    Delete a contact by ID.
+    @classmethod
+    def delete_contact(cls, contact_id):
+        """
+        Delete a contact by ID.
 
-    Args:
-        contact_id (int): ID of the contact to delete.
+        Args:
+            contact_id (int): ID of the contact to delete.
 
-    Returns:
-        tuple: (success, error_message)
-            - If successful: (True, None)
-            - If failed: (False, error message string)
-    """
-    try:
-        contact = cls.query.get(contact_id)
-        if not contact:
-            return False, "Contact not found"
-        
-        db.session.delete(contact)
-        db.session.commit()
-        return True, None
+        Returns:
+            tuple: (success, error_message)
+                - If successful: (True, None)
+                - If failed: (False, error message string)
+        """
+        try:
+            contact = cls.query.get(contact_id)
+            if not contact:
+                return False, "Contact not found"
+            
+            db.session.delete(contact)
+            db.session.commit()
+            return True, None
 
-    except Exception as e:
-        db.session.rollback()
-        return False, f"Failed to delete contact: {str(e)}"
+        except Exception as e:
+            db.session.rollback()
+            return False, f"Failed to delete contact: {str(e)}"
 
 

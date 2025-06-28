@@ -5,7 +5,7 @@ import ContactFilter from './ContactFilter';
 import { MdModeEdit, MdDeleteForever, MdBlock } from "react-icons/md";
 import { GoBlocked } from "react-icons/go";
 import { TbLockOpen } from "react-icons/tb";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaRegStar } from "react-icons/fa";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 const API_URL = import.meta.env.VITE_API_URL; // For Vite
@@ -50,10 +50,8 @@ function ContactsListPage() {
             }
         })
         .then(res => {
-            if (res.status === 401) {
-              // Token is missing or expired, redirect to login
-              navigate('/login');
-              return [];
+            if (!res.ok) {
+                throw new Error(`Server error: ${res.status}`);
             }
             return res.json();
           })
@@ -106,15 +104,17 @@ function ContactsListPage() {
         .catch(() => setDeleteStatus('error'));
     };
 
+    // Toggle Blocked
     const handleToggleBlocked = (contactId, currentBlockedStatus) => {
         const token = localStorage.getItem('token');
+        const newBlockedValue = currentBlockedStatus === 2 ? 1 : 2;
         fetch(`${API_URL}/contacts/${contactId}`, {
             method: 'PATCH',
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify({ is_blocked: !currentBlockedStatus }) // <-- snake_case key
+            body: JSON.stringify({ is_blocked: newBlockedValue })
         })
         .then(res => res.json())
         .then(updatedContact => {
@@ -124,26 +124,24 @@ function ContactsListPage() {
         });
     };
 
-    const handleToggleFavorite = async (contactId, currentFavoriteStatus) => {
-        try {
-            const token = localStorage.getItem('token');
-            const response = await axios.patch(
-                `${API_URL}/contacts/${contactId}`,
-                { is_favorite: !currentFavoriteStatus }, // <-- snake_case key
-                {
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    }
-                }
-            );
-            
-            const updatedContact = response.data;
+    // Toggle Favorite
+    const handleToggleFavorite = (contactId, currentFavoriteStatus) => {
+        const token = localStorage.getItem('token');
+        const newFavoriteValue = currentFavoriteStatus === 2 ? 1 : 2;
+        fetch(`${API_URL}/contacts/${contactId}`, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ is_favorite: newFavoriteValue })
+        })
+        .then(res => res.json())
+        .then(updatedContact => {
             const updated = contacts.map(c => c.id === contactId ? updatedContact : c);
             setContacts(updated);
             applyCurrentFilters(updated);
-        } catch (error) {
-            console.error('Error updating favorite status:', error);
-        }
+        });
     };
 
     const onSearch = (value) => {
@@ -196,18 +194,8 @@ function ContactsListPage() {
                             >
                                 <h3>
                                     {contact.name}
-                                    {contact.isFavorite && <FaStar className="favorite-icon" />}
-                                    {/* Blocked/Unblocked icon */}
-                                    <span
-                                      title={contact.isBlocked ? "Blocked (click to unblock)" : "Not blocked (click to block)"}
-                                      style={{ marginLeft: 8, cursor: "pointer", color: contact.isBlocked ? "red" : "gray" }}
-                                      onClick={e => {
-                                        e.stopPropagation();
-                                        handleToggleBlocked(contact.id, contact.isBlocked);
-                                      }}
-                                    >
-                                      {contact.isBlocked ? <MdBlock /> : <TbLockOpen />}
-                                    </span>
+                                    {/* Show favorite star indicator next to name */}
+                                    {contact.is_favorite === 2 && <FaStar className="favorite-icon" style={{ marginLeft: 8, color: "gold" }} />}
                                 </h3>
                                 <p>Phone: {contact.phone}</p>
                                 <p>Email: {contact.email}</p>
@@ -232,12 +220,24 @@ function ContactsListPage() {
                                     type="button"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        handleToggleBlocked(contact.id, contact.isBlocked);
+                                        handleToggleBlocked(contact.id, contact.is_blocked);
                                     }}
                                     className='block-btn'
-                                    title={contact.isBlocked ? "Unblock Contact" : "Block Contact"}
+                                    title={contact.is_blocked === 2 ? "Unblock Contact" : "Block Contact"}
                                 >
-                                    {contact.isBlocked ? <TbLockOpen /> : <GoBlocked />}
+                                    {contact.is_blocked === 2 ? <TbLockOpen /> : <GoBlocked />}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleToggleFavorite(contact.id, contact.is_favorite);
+                                    }}
+                                    className='favorite-btn'
+                                    title={contact.is_favorite === 2 ? "Remove from Favorites" : "Add to Favorites"}
+                                    style={{ color: contact.is_favorite === 2 ? "gold" : "gray" }}
+                                >
+                                    {contact.is_favorite === 2 ? <FaStar /> : <FaRegStar />}
                                 </button>
                             </div>
                         </div>

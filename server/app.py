@@ -24,23 +24,6 @@ migrate = Migrate(app, db)
 def index():
     return "<h1 style='color: red; margin-left: 60px;'>Backend server running</h1>"
 
-# @app.after_request
-# def after_request(response):
-#     response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
-#     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-#     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-#     response.headers.add('Access-Control-Allow-Credentials', 'true')
-#     return response
-
-
-# @app.route('/api/contacts', methods=['POST'])
-# def add_contact():
-#     return create_contact()
-
-
-@app.route('/api/test', methods=['GET'])
-def test():
-    return {'message': 'SQLAlchemy backend is running!'}
 
 # registration route
 @app.route('/register', methods=['POST'])
@@ -101,9 +84,12 @@ def login():
 @app.route('/contacts', methods=['GET'])
 @jwt_required()
 def get_contacts():
-    user_id = get_jwt_identity()
-    contacts = Contact.query.filter_by(user_id=user_id).all()
-    return jsonify([contact.to_dict() for contact in contacts])  # Fixed syntax error here
+    try:
+        user_id = get_jwt_identity()
+        contacts = Contact.query.filter_by(user_id=user_id).all()
+        return jsonify([c.to_dict() for c in contacts]), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # Add these additional routes that your frontend expects
 
@@ -161,9 +147,15 @@ def patch_contact(contact_id):
 
     data = request.get_json()
     if 'is_favorite' in data:
-        contact.is_favorite = bool(data['is_favorite'])
+        if isinstance(data['is_favorite'], bool):
+            contact.is_favorite = 2 if data['is_favorite'] else 1
+        else:
+            contact.is_favorite = int(data['is_favorite'])
     if 'is_blocked' in data:
-        contact.is_blocked = bool(data['is_blocked'])
+        if isinstance(data['is_blocked'], bool):
+            contact.is_blocked = 2 if data['is_blocked'] else 1
+        else:
+            contact.is_blocked = int(data['is_blocked'])
     # Add other fields as needed
 
     db.session.commit()
